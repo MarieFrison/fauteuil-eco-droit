@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Le Fauteuil Éco-Droit : jeu de révision du vocabulaire d'économie-droit pour les 2MRC, en solo ou en équipes (M. Frison).">
+<title>Le Fauteuil Éco-Droit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap">
+<style>
+:root{
+  --night:#17123F; --stage:#251C5E; --stage-2:#33287A; --velvet:#C8213F; --velvet-d:#8E1530;
+  --brass:#F2B632; --brass-l:#FFD978; --card:#FFF8EA; --ink:#1D1745; --muted:#6C6496;
+  --cash:#F2B632; --carre:#22B3A6; --duo:#5B8CFF; --ok:#2FBF71; --no:#FF5A5F;
+  --f-logo:"Comic Sans MS","Comic Sans","Comic Neue",cursive; --f-display:"Comic Sans MS","Comic Sans","Comic Neue",cursive; --f-body:"Comic Sans MS","Comic Sans","Comic Neue",cursive;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;color:#F4F0FF;font-family:var(--f-body);font-size:18px;line-height:1.45;
+  background:radial-gradient(ellipse 60% 70% at 50% -10%,rgba(255,217,120,.22),transparent 60%),
+             repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 120px),
+             linear-gradient(180deg,var(--stage) 0%,var(--night) 70%)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;margin:0;line-height:1.08;text-wrap:balance}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:4px solid var(--brass-l);outline-offset:3px}
+[hidden]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 20px 48px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.logo{font-family:var(--f-logo);font-weight:700;font-size:22px;color:var(--brass);letter-spacing:.02em;background:none;border:0;padding:0}
+.logo small{display:block;font-family:var(--f-body);font-size:13px;color:#BDB4E6;letter-spacing:0}
+.tbtn{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 14px;font-size:15px}
+.btn{border:0;border-radius:14px;padding:14px 22px;font-family:var(--f-display);font-weight:800;font-size:20px;background:var(--brass);color:var(--ink);box-shadow:0 5px 0 #B9861A;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #B9861A}
+.btn.alt{background:#fff;box-shadow:0 5px 0 #B7B0DA}
+.btn.ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4);box-shadow:none}
+.btn.red{background:var(--velvet);color:#fff;box-shadow:0 5px 0 var(--velvet-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* Plateau d'accueil */
+.stagehero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;margin-top:8px}
+.stagehero h1{font-size:clamp(40px,6vw,76px);letter-spacing:-.01em}
+.stagehero h1 span{display:block;font-family:var(--f-logo);font-size:.62em;color:var(--brass);letter-spacing:.01em;font-weight:400}
+.lead{color:#D8D1F5;margin:14px 0 22px;max-width:52ch}
+.chair{position:relative;max-width:440px;margin:0 auto}
+.chair svg{width:100%;height:auto;display:block;filter:drop-shadow(0 30px 30px rgba(0,0,0,.45))}
+.plaque{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);background:linear-gradient(180deg,var(--brass-l),var(--brass));color:var(--ink);border-radius:8px;padding:6px 16px;text-align:center;min-width:62%;box-shadow:0 4px 0 #9A6C10}
+.plaque b{display:block;font-family:var(--f-logo);font-size:20px;line-height:1.1}
+.plaque span{font-size:14px;font-weight:700}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.mode{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);border-radius:18px;padding:18px;text-align:left;display:grid;gap:6px}
+.mode:hover{border-color:var(--brass)}
+.mode h3{font-size:24px}
+.mode p{color:#CFC7F0;font-size:16px}
+.row .th{color:var(--ink)}
+.rules{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rule{border-top:4px solid var(--brass);padding-top:10px}
+.rule h3{font-size:19px;margin-bottom:4px}
+.rule p{font-size:15.5px;color:#CFC7F0}
+.pts{display:inline-flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{border-radius:999px;padding:2px 10px;font-weight:700;font-size:14px;color:var(--ink)}
+.chip.cash{background:var(--cash)} .chip.carre{background:var(--carre)} .chip.duo{background:var(--duo);color:#fff}
+
+/* Panneaux */
+.panel{background:var(--card);color:var(--ink);border-radius:22px;padding:24px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.panel h2{font-size:30px;margin-bottom:6px}
+.panel .sub{color:var(--muted);margin-bottom:16px}
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field label{font-weight:700}
+.field input{border:3px solid var(--ink);border-radius:12px;padding:10px 12px;background:#fff;max-width:420px}
+.teams{display:grid;gap:8px;max-width:520px}
+.teams .t{display:flex;gap:8px}
+.teams input{flex:1;min-width:0}
+.field input{width:100%}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.game{border:2px solid #E3DCC8;border-radius:16px;padding:12px 14px;background:#fff}
+.game h3{font-size:19px;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px}
+.game h3 small{font-family:var(--f-body);font-weight:400;font-size:14px;color:var(--muted)}
+.th{display:flex;align-items:center;gap:10px;padding:6px 4px;border-radius:8px}
+.th input{width:22px;height:22px;accent-color:var(--velvet)}
+.th.locked{opacity:.5}
+.th .lk{margin-left:auto;font-size:13px;color:var(--muted)}
+.note{background:#FFF0C7;border-left:6px solid var(--brass);border-radius:10px;padding:10px 14px;margin:12px 0;color:var(--ink)}
+.err{background:#FFE1E1;border-left:6px solid var(--no);border-radius:10px;padding:10px 14px;margin:12px 0;color:var(--ink)}
+
+/* Jeu */
+.hud{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.phase{font-family:var(--f-display);font-weight:800;font-size:22px}
+.phase small{display:block;font-family:var(--f-body);font-weight:400;font-size:15px;color:#BDB4E6}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+.pl{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:10px 12px;display:grid;gap:2px}
+.pl b{font-family:var(--f-display);font-size:18px;overflow-wrap:anywhere}
+.pl .sc{font-family:var(--f-logo);font-size:28px;color:var(--brass)}
+.pl.cur{border-color:var(--brass);background:rgba(242,182,50,.14)}
+.pl.out{opacity:.38;text-decoration:line-through}
+.pl.champ{border-color:var(--velvet);background:rgba(200,33,63,.22)}
+.who{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.avatar{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-logo);font-size:24px;background:var(--brass);color:var(--ink);flex:none}
+.avatar.champ{background:var(--velvet);color:#fff}
+.who h2{font-size:28px}
+.themes2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tcard{background:var(--card);color:var(--ink);border:0;border-radius:20px;padding:22px;text-align:left;display:grid;gap:8px;min-height:150px;box-shadow:0 8px 0 #CFC4A6}
+.tcard:hover{transform:translateY(-2px)}
+.tcard small{color:var(--muted);font-size:15px}
+.tcard b{font-family:var(--f-display);font-size:28px;line-height:1.1}
+.qcard{background:var(--card);color:var(--ink);border-radius:22px;padding:26px 28px;box-shadow:0 10px 0 #CFC4A6}
+.qcard .tn{color:var(--muted);font-size:16px;margin-bottom:8px}
+.qcard h2{font-size:clamp(26px,3.4vw,40px)}
+.mchoice{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.mbtn{border:0;border-radius:18px;padding:18px 14px;color:var(--ink);display:grid;gap:4px;text-align:center;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+.mbtn b{font-family:var(--f-logo);font-size:30px}
+.mbtn span{font-weight:700}
+.mbtn.cash{background:var(--cash)} .mbtn.carre{background:var(--carre)} .mbtn.duo{background:var(--duo);color:#fff}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.ans{border:3px solid transparent;border-radius:16px;padding:16px 18px;text-align:left;background:#fff;color:var(--ink);font-size:21px;font-weight:700;display:flex;gap:12px;align-items:center;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.ans i{font-style:normal;font-family:var(--f-logo);width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--stage-2);color:#fff}
+.ans.ok{background:var(--ok);color:#fff}
+.ans.no{background:var(--no);color:#fff}
+.ans:disabled{cursor:default}
+.cashbox{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.cashbox input{flex:1;min-width:220px;border:3px solid var(--ink);border-radius:14px;padding:14px 16px;font-size:21px;background:#fff;color:var(--ink)}
+.reveal{margin-top:18px;background:var(--stage-2);color:#fff;border-radius:16px;padding:16px 18px;font-size:22px}
+.reveal b{color:var(--brass-l)}
+.verdict{margin-top:16px;font-family:var(--f-display);font-weight:800;font-size:30px}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--no)}
+.timer{height:10px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden;margin-top:16px}
+.timer i{display:block;height:100%;background:var(--brass);width:100%}
+.next{margin-top:20px;display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.botline{margin-top:16px;font-size:20px;color:#E9E3FF}
+.duelbar{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:16px}
+.duelside{background:rgba(255,255,255,.07);border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.duelside.on{outline:4px solid var(--brass)}
+.duelside .sc{font-family:var(--f-logo);font-size:36px;color:var(--brass);margin-left:auto}
+.vs{font-family:var(--f-logo);font-size:30px;color:var(--velvet)}
+.dots{display:flex;gap:6px;margin-top:4px}
+.dots span{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.18)}
+.dots span.ok{background:var(--ok)} .dots span.no{background:var(--no)}
+.endscene{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.endscene h1{font-size:clamp(36px,5vw,64px)}
+.wobble{animation:wob 1s ease-in-out 2}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+.hall{margin-top:16px;display:grid;gap:6px}
+.hall div{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.15);padding:6px 0}
+.small{font-size:15px;color:#BDB4E6}
+.panel .small{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:760px){
+  .stagehero,.endscene{grid-template-columns:1fr}
+  .chair{max-width:300px}
+  .modes,.rules,.themes2,.answers{grid-template-columns:1fr}
+  .mchoice{grid-template-columns:1fr}
+  .duelbar{grid-template-columns:1fr}
+  .vs{text-align:center}
+  .btn{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <button class="logo" data-act="home" aria-label="Retour à l'accueil">LE FAUTEUIL ÉCO-DROIT<small>Révisions d'économie-droit · 2MRC · M. Frison</small></button>
+    <div class="row"><button class="tbtn" data-act="sound" id="sndbtn">Son : oui</button><button class="tbtn" data-act="themes">Thèmes</button></div>
+  </header>
+  <main id="app" aria-live="polite"></main>
+</div>
+<script>
+/* Banque de questions. Chaque question : [question, bonne réponse, leurre 1, leurre 2, leurre 3]
+   Les thèmes sont débloqués par les missions des jeux (clé de sauvegarde + identifiant de mission). */
+const THEMES = [
+  /* ---------- MODULE 1 · URBAN SHOP ---------- */
+  { id: "u1", game: "Urban Shop", name: "Économie ou droit ?", key: "U", m: "m1", qs: [
+    ["Comment appelle-t-on l'ensemble des règles qui organisent la vie en société ?", "Le droit", "L'économie", "La morale", "Le marché"],
+    ["Quelles sont les trois activités de l'économie ?", "Production, consommation, échanges", "Vente, achat, publicité", "Travail, salaire, impôts", "Offre, demande, prix"],
+    ["Fabriquer un bien ou fournir un service, c'est…", "Produire", "Consommer", "Échanger", "Épargner"],
+    ["Une casquette est…", "Un bien", "Un service", "Un flux monétaire", "Une règle de droit"],
+    ["Une retouche de pantalon est…", "Un service", "Un bien", "Un marché", "Une production non marchande"],
+    ["Le magasin doit afficher ses prix : cela relève…", "Du droit", "De l'économie seulement", "De la politesse", "De la morale"],
+    ["Quelle notion relève à la fois de l'économie et du droit ?", "Le prix", "La couleur d'un sweat", "Le nom du magasin", "La météo"]
+  ] },
+  { id: "u7", game: "Urban Shop", name: "La règle de droit", key: "U", m: "m1", qs: [
+    ["Une règle qui s'applique à tous ceux qui sont dans la même situation est…", "Générale", "Facultative", "Personnelle", "Morale"],
+    ["Que risque-t-on si on ne respecte pas une règle de droit ?", "Une sanction de l'État", "Rien du tout", "Une remarque d'un ami", "Un carton jaune"],
+    ["« Dire bonjour aux clients » est une règle…", "De politesse", "De droit", "Européenne", "Constitutionnelle"],
+    ["Qui vote les lois en France ?", "Le Parlement", "Le maire", "Le Président seul", "Les juges"],
+    ["Quel texte est au sommet de la hiérarchie des normes ?", "La Constitution", "La loi", "Le contrat", "Le décret"],
+    ["Un décret ou un arrêté est…", "Un règlement", "Une loi", "Un contrat", "Une décision de justice"],
+    ["Un contrat doit respecter…", "La loi et les règles supérieures", "Uniquement l'avis du vendeur", "Rien", "Les règles du football"]
+  ] },
+  { id: "u2", game: "Urban Shop", name: "Les agents économiques", key: "U", m: "m2", qs: [
+    ["Léa achète un jean pour elle : quel agent économique est-elle ?", "Un ménage", "Une entreprise", "Une administration publique", "Le reste du monde"],
+    ["Une banque qui prête de l'argent est…", "Une institution financière", "Un ménage", "Une administration publique", "Le reste du monde"],
+    ["La mairie qui entretient les rues est…", "Une administration publique", "Une entreprise", "Une institution financière", "Un ménage"],
+    ["Un fabricant installé au Portugal fait partie…", "Du reste du monde", "Des ménages", "Des administrations publiques", "Des institutions financières"],
+    ["Le rôle principal des entreprises est de…", "Produire et vendre des biens et services", "Prélever des impôts", "Financer l'économie", "Voter les lois"],
+    ["L'école publique gratuite est une production…", "Non marchande", "Marchande", "Étrangère", "Financière"],
+    ["Les agents ont besoin les uns des autres : ils sont…", "Interdépendants", "Indépendants", "Concurrents", "Identiques"]
+  ] },
+  { id: "u3", game: "Urban Shop", name: "Les échanges et les flux", key: "U", m: "m3", qs: [
+    ["La livraison de 50 vestes au magasin est un flux…", "Réel", "Monétaire", "Financier", "Juridique"],
+    ["Le paiement d'une facture est un flux…", "Monétaire", "Réel", "Matériel", "De travail"],
+    ["Le travail d'un vendeur est un flux…", "Réel", "Monétaire", "Bancaire", "Fiscal"],
+    ["Le salaire versé au vendeur est un flux…", "Monétaire", "Réel", "De marchandises", "Gratuit"],
+    ["Dans un échange, flux réel et flux monétaire circulent…", "En sens inverse", "Dans le même sens", "Jamais ensemble", "Seulement à l'étranger"],
+    ["Que reçoivent les ménages des entreprises dans le circuit économique ?", "Des salaires, des biens et services", "Des impôts", "Du travail", "Des lois"],
+    ["Urban Shop paie ses impôts : le flux monétaire va vers…", "Les administrations publiques", "Les ménages", "Le reste du monde", "Les clients"]
+  ] },
+  { id: "u4", game: "Urban Shop", name: "Les marchés", key: "U", m: "m4", qs: [
+    ["Un marché, c'est la rencontre entre…", "Une offre et une demande", "Deux magasins", "Un juge et un client", "L'État et les impôts"],
+    ["Un site de vente en ligne est un marché…", "Virtuel", "Réel", "Interdit", "Public"],
+    ["Urban Shop recrute un vendeur : sur quel marché ?", "Le marché du travail", "Le marché des capitaux", "Le marché des biens et services", "Le marché aux puces"],
+    ["Une entreprise emprunte à sa banque : sur quel marché ?", "Le marché des capitaux", "Le marché du travail", "Le marché des biens et services", "Le marché de gros"],
+    ["Sur le marché du travail, qui offre du travail ?", "Les salariés et les candidats", "Les entreprises", "Les banques", "L'État seulement"],
+    ["Ce que les vendeurs proposent à la vente, c'est…", "L'offre", "La demande", "Le prix", "Le stock de sécurité"],
+    ["Ce que les acheteurs souhaitent acheter, c'est…", "La demande", "L'offre", "La production", "Le salaire"]
+  ] },
+  { id: "u5", game: "Urban Shop", name: "Pourquoi les prix changent", key: "U", m: "m5", qs: [
+    ["Demande forte et offre limitée : le prix peut…", "Augmenter", "Diminuer", "Disparaître", "Rester bloqué par la loi"],
+    ["Offre importante et demande faible : le prix peut…", "Diminuer", "Augmenter", "Doubler", "Rester toujours stable"],
+    ["100 sweats pour 95 clients : le prix peut…", "Rester stable", "Exploser", "Être divisé par deux", "Être interdit"],
+    ["À quoi servent les soldes ?", "Écouler un stock quand la demande est faible", "Augmenter les prix", "Recruter des vendeurs", "Payer les impôts"],
+    ["Une paire en édition limitée est chère car…", "La demande est forte et l'offre limitée", "L'offre est très importante", "L'État fixe son prix", "Personne n'en veut"],
+    ["Le prix dépend de la rencontre entre…", "L'offre et la demande", "Le vendeur et sa banque", "Le juge et l'avocat", "Le client et l'État"],
+    ["On écrit « le prix peut augmenter » car c'est…", "Une tendance, pas une obligation", "Une règle de droit", "Une loi votée", "Toujours vrai"]
+  ] },
+  /* ---------- MODULE 1 · MOVE CLUB ---------- */
+  { id: "v1", game: "Move Club", name: "À quoi sert le droit ?", key: "U", m: "m7", qs: [
+    ["Un juge décide qui a raison dans un litige : quelle fonction du droit ?", "Régler les conflits", "Sanctionner", "Organiser la vie en société", "Protéger les personnes"],
+    ["Les normes de sécurité des appareils de sport servent à…", "Protéger les personnes", "Régler les conflits", "Sanctionner", "Faire de la publicité"],
+    ["Un voleur est condamné à une amende : quelle fonction ?", "Sanctionner", "Protéger", "Organiser", "Informer"],
+    ["Une règle de droit qui ne vise personne nommément est…", "Abstraite", "Morale", "Facultative", "Privée"],
+    ["« Respecter le hors-jeu au football » est une règle…", "Du jeu", "De droit", "Européenne", "Pénale"],
+    ["Ne pas fumer dans une salle de sport est…", "Une règle de droit", "Une règle de politesse", "Une règle morale", "Un conseil"],
+    ["Sans droit, ce serait…", "La loi du plus fort", "Plus juste", "Plus calme", "Plus simple pour les juges"]
+  ] },
+  { id: "v2", game: "Move Club", name: "Les sources du droit", key: "U", m: "m8", qs: [
+    ["Dans un État de droit…", "Tout le monde, y compris l'État, respecte le droit", "L'État fait ce qu'il veut", "Il n'y a pas de juges", "Seuls les citoyens obéissent"],
+    ["En quelle année a été adoptée la Constitution actuelle ?", "1958", "1789", "1945", "2000"],
+    ["Un décret est pris par…", "Le Gouvernement", "Le Parlement", "Le maire", "Un juge"],
+    ["Un arrêté municipal est pris par…", "Le maire", "Le Sénat", "L'Union européenne", "Le Président"],
+    ["Le RGPD est…", "Un règlement européen", "Une loi française", "Un arrêté du maire", "Un contrat"],
+    ["Une directive européenne doit être…", "Transposée dans la loi de chaque pays", "Appliquée sans rien faire", "Votée par les maires", "Signée par chaque citoyen"],
+    ["Un règlement européen s'applique…", "Directement dans tous les pays de l'Union", "Seulement en Belgique", "Après un référendum", "Jamais en France"]
+  ] },
+  { id: "v3", game: "Move Club", name: "La hiérarchie des normes", key: "U", m: "m9", qs: [
+    ["Qu'est-ce qui est supérieur ?", "La loi", "Le décret", "L'arrêté", "Le contrat"],
+    ["Qu'est-ce qui est supérieur ?", "Un traité européen", "Une loi", "Un décret", "Un arrêté"],
+    ["Qu'est-ce qui est en bas de la pyramide ?", "Le contrat et le règlement intérieur", "La Constitution", "La loi", "Le traité européen"],
+    ["Un décret contraire à la loi peut être…", "Annulé par un juge", "Appliqué quand même", "Transformé en Constitution", "Ignoré par la loi"],
+    ["Un règlement intérieur impose 60 h de travail par semaine : il est…", "Contraire à la loi", "Conforme", "Supérieur au Code du travail", "Obligatoire"],
+    ["Le principe de hiérarchie des normes dit que chaque règle doit…", "Respecter les règles supérieures", "Être votée par le maire", "Être écrite en anglais", "Contredire la Constitution"],
+    ["Qu'est-ce qui est supérieur ?", "Un décret", "Un arrêté municipal", "Un contrat", "Un règlement intérieur"]
+  ] },
+  { id: "v4", game: "Move Club", name: "Les juridictions", key: "U", m: "m10", qs: [
+    ["Un salarié conteste son licenciement devant…", "Le conseil de prud'hommes", "Le tribunal administratif", "La cour d'assises", "Le tribunal de commerce"],
+    ["Un litige entre deux commerçants va devant…", "Le tribunal de commerce", "Le tribunal de police", "Le conseil de prud'hommes", "Le Conseil d'État"],
+    ["Une décision de la mairie se conteste devant…", "Le tribunal administratif", "Le tribunal judiciaire", "Le tribunal de commerce", "Le conseil de prud'hommes"],
+    ["Un vol (délit) est jugé par…", "Le tribunal correctionnel", "Le tribunal de police", "Le tribunal administratif", "Le conseil de prud'hommes"],
+    ["Une contravention est jugée par…", "Le tribunal de police", "La cour d'assises", "Le tribunal de commerce", "Le Conseil d'État"],
+    ["Que fait la cour d'appel ?", "Elle rejuge l'affaire", "Elle vote les lois", "Elle fixe les impôts", "Elle annule la Constitution"],
+    ["La Cour de cassation…", "Vérifie que le droit a été bien appliqué", "Rejuge tous les faits", "Juge les contraventions", "Juge les litiges avec la mairie"]
+  ] },
+  { id: "v5", game: "Move Club", name: "Le contrat", key: "U", m: "m11", qs: [
+    ["Un contrat est…", "Un accord de volontés qui crée des obligations", "Une décision du maire", "Une règle de politesse", "Un jugement"],
+    ["Les personnes qui s'engagent dans un contrat sont…", "Les parties", "Les clauses", "Les juges", "Les témoins"],
+    ["Ce sur quoi porte le contrat, c'est…", "L'objet", "L'échéance", "La signature", "La clause pénale"],
+    ["La date de fin d'un contrat est…", "L'échéance", "La date d'application", "L'objet", "La clause"],
+    ["Un article du contrat qui fixe une règle entre les parties est…", "Une clause", "Une loi", "Un décret", "Une partie"],
+    ["Acheter une bouteille d'eau au distributeur, c'est…", "Un contrat de vente, même sans écrit", "Jamais un contrat", "Un contrat de travail", "Une donation"],
+    ["Un contrat permet notamment de…", "Garder une preuve en cas de litige", "Ne jamais payer", "Changer d'avis sans conséquence", "Éviter les impôts"]
+  ] },
+  { id: "v6", game: "Move Club", name: "Droits et obligations", key: "U", m: "m12", qs: [
+    ["L'obligation de l'une des parties correspond…", "Au droit de l'autre", "À une sanction", "À une loi", "À une clause pénale"],
+    ["Livrer un colis commandé est une obligation…", "De résultat", "De moyens", "Morale", "Facultative"],
+    ["Le coach qui aide un adhérent à progresser a une obligation…", "De moyens", "De résultat", "De garantie", "De rétractation"],
+    ["Un médecin qui soigne un patient a une obligation…", "De moyens", "De résultat", "De livraison", "De paiement"],
+    ["Pour l'adhérent, « payer l'abonnement » est…", "Une obligation", "Un droit", "Une clause facultative", "Un cadeau"],
+    ["Pour l'adhérent, « accéder à la salle » est…", "Un droit", "Une obligation", "Une sanction", "Un dommage"],
+    ["Ouvrir la salle aux horaires prévus est une obligation…", "De résultat", "De moyens", "Morale", "Facultative"]
+  ] },
+  { id: "v7", game: "Move Club", name: "La responsabilité contractuelle", key: "U", m: "m13", qs: [
+    ["Combien de conditions faut-il pour engager la responsabilité contractuelle ?", "3", "1", "2", "5"],
+    ["Laquelle n'est PAS une condition ?", "Une amende pénale", "L'inexécution", "Le dommage", "Le lien de causalité"],
+    ["Le préjudice subi par la victime s'appelle…", "Le dommage", "L'inexécution", "La clause", "L'échéance"],
+    ["Le dommage doit venir de l'inexécution : c'est…", "Le lien de causalité", "L'obligation de moyens", "La garantie", "L'objet du contrat"],
+    ["La somme d'argent qui répare un préjudice s'appelle…", "Des dommages-intérêts", "Une amende", "Un salaire", "Une commission"],
+    ["Un colis arrive en retard sans aucune conséquence : la responsabilité est-elle engagée ?", "Non, il n'y a pas de dommage", "Oui, toujours", "Oui, pénalement", "Seulement le dimanche"],
+    ["Quand une obligation du contrat n'est pas exécutée, on parle…", "D'inexécution", "De rétractation", "D'usage", "De transposition"]
+  ] },
+  /* ---------- MODULE 2 · CAP AVENIR ---------- */
+  { id: "b1", game: "Cap Avenir", name: "Le budget d'un ménage", key: "M2", m: "m15", qs: [
+    ["Revenu disponible = revenus + prestations sociales – …", "Prélèvements obligatoires", "Dépenses de loisirs", "Épargne", "Loyer"],
+    ["Un impôt ou une cotisation sociale est…", "Un prélèvement obligatoire", "Une prestation sociale", "Une dépense de consommation", "Une épargne"],
+    ["Les allocations familiales sont…", "Une prestation sociale", "Un prélèvement obligatoire", "Un salaire", "Un crédit"],
+    ["La part d'un poste dans le total des dépenses s'appelle…", "Le coefficient budgétaire", "Le taux d'épargne", "Le revenu disponible", "Le TAEG"],
+    ["600 € d'alimentation sur 2 400 € de dépenses : coefficient budgétaire ?", "25 %", "40 %", "4 %", "60 %"],
+    ["Le loyer est une dépense…", "Pré-engagée", "Non pré-engagée", "Facultative", "Exceptionnelle"],
+    ["Le revenu disponible sert à…", "Consommer et épargner", "Payer uniquement les impôts", "Rembourser l'État", "Verser des salaires"]
+  ] },
+  { id: "b2", game: "Cap Avenir", name: "L'évolution de la consommation", key: "M2", m: "m16", qs: [
+    ["Depuis 1960, la part de l'alimentation dans la consommation a…", "Diminué", "Augmenté", "Doublé", "Disparu"],
+    ["Aujourd'hui, le premier poste de consommation des ménages est…", "Le logement", "L'habillement", "La santé", "Les loisirs"],
+    ["Les dépenses pré-engagées représentaient environ… du revenu en 2024.", "30 %", "5 %", "60 %", "90 %"],
+    ["De 13,5 % à 30,3 % : l'écart est de…", "16,8 points", "16,8 %", "43,8 points", "2 points"],
+    ["De 0,4 % à 2,2 % : la part a été multipliée par…", "5,5", "1,8", "2,2", "10"],
+    ["Une explication de la hausse de la part du logement :", "La hausse des loyers et des prix de l'immobilier", "La baisse des loyers", "La fin des factures d'énergie", "Les soldes"],
+    ["Pour commenter un tableau, on commence par…", "Présenter le document (source, date, sujet)", "Donner son avis", "Recopier tous les chiffres", "Conclure"]
+  ] },
+  { id: "b3", game: "Cap Avenir", name: "Épargne et crédit", key: "M2", m: "m17", qs: [
+    ["La partie du revenu disponible qui n'est pas consommée, c'est…", "L'épargne", "Le crédit", "L'impôt", "La prestation"],
+    ["Revenu disponible 2 000 €, épargne 300 € : taux d'épargne ?", "15 %", "30 %", "6,7 %", "20 %"],
+    ["Une épargne disponible à tout moment, sans risque :", "Le Livret A", "Les actions", "Le PEL", "Une maison"],
+    ["Un placement qui peut rapporter mais aussi faire perdre :", "Les actions en Bourse", "Le Livret A", "Le LDDS", "Le Livret jeune"],
+    ["Emprunt 1 000 €, total remboursé 1 080 € : coût du crédit ?", "80 €", "1 080 €", "1 000 €", "8 €"],
+    ["Ne plus pouvoir rembourser ses dettes, c'est le…", "Surendettement", "Taux d'épargne", "Revenu disponible", "Découvert autorisé"],
+    ["Le taux qui permet de comparer des offres de crédit :", "Le TAEG", "Le taux d'épargne", "Le coefficient budgétaire", "La TVA"]
+  ] },
+  /* ---------- MODULE 2 · CYCLE LAB ---------- */
+  { id: "r1", game: "Cycle Lab", name: "Consommer responsable", key: "M2", m: "m19", qs: [
+    ["Le développement durable répond aux besoins d'aujourd'hui sans compromettre ceux…", "Des générations futures", "Des entreprises", "Des banques", "Des touristes"],
+    ["Combien le développement durable a-t-il de piliers ?", "3", "2", "4", "5"],
+    ["Recycler les batteries relève du pilier…", "Environnemental", "Économique", "Social", "Juridique"],
+    ["Former des apprentis relève du pilier…", "Social", "Environnemental", "Économique", "Financier"],
+    ["Neuf 800 €, reconditionné 520 € : économie en % ?", "35 %", "28 %", "52 %", "65 %"],
+    ["Un produit reconditionné est…", "Un produit d'occasion vérifié et remis en état", "Un produit neuf", "Un produit cassé", "Un produit gratuit"],
+    ["Un critère de consommation responsable :", "Acheter local", "Changer de téléphone tous les 6 mois", "Choisir le plus emballé", "Acheter sans réfléchir"]
+  ] },
+  { id: "r2", game: "Cycle Lab", name: "Propriété, usage et économie circulaire", key: "M2", m: "m20", qs: [
+    ["Louer une console au mois, c'est privilégier…", "L'usage", "La propriété", "L'épargne", "Le crédit"],
+    ["Écouter de la musique en streaming, c'est…", "Consommer l'usage", "Devenir propriétaire", "Épargner", "Produire"],
+    ["« Extraire, fabriquer, consommer, jeter » décrit l'économie…", "Linéaire", "Circulaire", "Solidaire", "Collaborative"],
+    ["Réparer, réemployer, recycler, c'est l'économie…", "Circulaire", "Linéaire", "Financière", "Souterraine"],
+    ["Location à 15 € par mois pendant 24 mois : coût total ?", "360 €", "39 €", "180 €", "240 €"],
+    ["Dans l'économie circulaire, un déchet devient…", "Une ressource", "Un produit interdit", "Une taxe", "Un service"],
+    ["Pour un usage court, il vaut souvent mieux…", "Louer", "Acheter neuf", "Emprunter à la banque", "Ne rien utiliser"]
+  ] },
+  { id: "r3", game: "Cycle Lab", name: "Le numérique et la consommation", key: "M2", m: "m21", qs: [
+    ["La vente de biens et services sur internet s'appelle…", "Le e-commerce", "Le commerce de gros", "Le troc", "La franchise"],
+    ["Un site qui réunit de nombreux vendeurs, c'est…", "Une place de marché", "Un comparateur", "Un réseau social", "Une banque en ligne"],
+    ["Une place de marché gagne de l'argent grâce à…", "Une commission sur chaque vente", "Des impôts", "Des dons", "Des amendes"],
+    ["Commission de 12 % sur 500 € :", "60 €", "12 €", "440 €", "120 €"],
+    ["Commander en ligne et retirer en magasin, c'est…", "Le click and collect", "La livraison express", "La location", "Le drive-in"],
+    ["Un outil pour comparer rapidement les offres :", "Un comparateur de prix", "Un ticket de caisse", "Un bon de commande", "Une facture"],
+    ["Un risque des achats en ligne :", "Les achats impulsifs", "Ne jamais pouvoir comparer", "Ne jamais pouvoir retourner un produit", "Ne pas pouvoir payer"]
+  ] },
+  { id: "r4", game: "Cycle Lab", name: "Le contrat de vente", key: "M2", m: "m22", qs: [
+    ["Dans un contrat de vente, le vendeur s'engage à…", "Livrer le bien", "Payer le prix", "Prendre livraison", "Rétracter la vente"],
+    ["Dans un contrat de vente, l'acheteur s'engage à…", "Payer le prix", "Livrer le bien", "Garantir la conformité", "Informer le vendeur"],
+    ["Le vendeur en sait plus que l'acheteur : c'est…", "L'asymétrie d'information", "La garantie", "La rétractation", "Le contrat d'usage"],
+    ["La garantie légale de conformité dure…", "2 ans", "6 mois", "15 jours", "10 ans"],
+    ["Qui doit faire jouer la garantie légale de conformité ?", "Le vendeur", "Le fabricant uniquement", "Le client lui-même", "La CNIL"],
+    ["Après un achat sur internet, on peut changer d'avis pendant…", "14 jours", "2 ans", "24 heures", "3 mois"],
+    ["Après un achat en magasin, le droit de rétractation…", "N'existe pas (sauf geste commercial)", "Dure 14 jours", "Dure 1 mois", "Dure 2 ans"]
+  ] },
+  { id: "r5", game: "Cycle Lab", name: "Les données personnelles", key: "M2", m: "m23", qs: [
+    ["Une information qui permet d'identifier une personne est…", "Une donnée personnelle", "Une donnée anonyme", "Un cookie", "Une statistique"],
+    ["L'autorité française qui protège les données personnelles :", "La CNIL", "La Fevad", "L'Insee", "La DGCCRF"],
+    ["Le RGPD est…", "Un règlement européen sur les données", "Une loi sur les prix", "Un contrat de vente", "Un logiciel"],
+    ["Savoir quelles données une entreprise a sur moi, c'est le droit…", "D'accès", "De rétractation", "De propriété", "D'opposition"],
+    ["Faire supprimer mes données, c'est le droit…", "À l'effacement", "D'accès", "De garantie", "De rectification"],
+    ["Pour déposer des cookies publicitaires, le site doit…", "Obtenir le consentement", "Ne rien demander", "Payer l'internaute", "Prévenir la police"],
+    ["Ne plus recevoir de publicités, c'est le droit…", "D'opposition", "D'accès", "À l'effacement", "De rectification"]
+  ] }
+];
+
+const STORE = "frison-2mrc-fauteuil-v1";
+const PROG = { U: "urbanshop-2mrc-seq1-v1", M2: "frison-2mrc-module2-v1" };
+const PROF_SALT = "cb379304e3658356", PROF_HASH = "4da7a5043f3e4050b9c06d1cb93e4b155c2b3b847e0927646b83648d2786b796";
+const GAMES = ["Urban Shop", "Move Club", "Cap Avenir", "Cycle Lab"];
+const MODES = { cash: { pts: 3, label: "Cash", sub: "sans propositions" }, carre: { pts: 2, label: "Carré", sub: "4 propositions" }, duo: { pts: 1, label: "Duo", sub: "2 propositions" } };
+const BOTS = ["Camille", "Rayan", "Inès", "Noah", "Jade", "Malo"];
+const DUEL_Q = 5;
+
+/* ---------- Mémoire ---------- */
+function loadP() { try { const j = JSON.parse(localStorage.getItem(STORE) || "null"); if (j && j.v === 1) return j; } catch (e) {} return { v: 1, team: { champ: "", reign: 0, hall: [] }, solo: { name: "", reign: 0, best: 0, cagnotte: 0, wins: 0, games: 0 }, unlockAll: false, teamThemes: null, snd: true }; }
+function saveP() { try { localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) {} }
+let P = loadP();
+function doneMissions() {
+  const d = {};
+  for (const k of Object.keys(PROG)) {
+    try { const s = JSON.parse(localStorage.getItem(PROG[k]) || "null"); d[k] = (s && s.done) || {}; } catch (e) { d[k] = {}; }
+  }
+  return d;
+}
+function unlockedIds() { const d = doneMissions(); return THEMES.filter((t) => P.unlockAll || d[t.key][t.m]).map((t) => t.id); }
+
+/* ---------- Outils ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const rnd = (n) => Math.floor(Math.random() * n);
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const ini = (n) => (String(n).trim()[0] || "?").toUpperCase();
+const th = (id) => THEMES.find((t) => t.id === id);
+let AC = null;
+function beep(kind) {
+  if (!P.snd) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const t = AC.currentTime, seq = kind === "ok" ? [660, 990] : kind === "win" ? [523, 659, 784, 1046] : kind === "tick" ? [880] : [220, 160];
+    seq.forEach((f, i) => { const o = AC.createOscillator(), g = AC.createGain(), st = t + i * 0.11; o.type = kind === "no" ? "square" : "triangle"; o.frequency.value = f; g.gain.setValueAtTime(1e-4, st); g.gain.exponentialRampToValueAtTime(kind === "no" ? 0.05 : 0.15, st + 0.01); g.gain.exponentialRampToValueAtTime(1e-4, st + 0.2); o.connect(g); g.connect(AC.destination); o.start(st); o.stop(st + 0.22); });
+  } catch (e) {}
+}
+async function hash(pw) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(PROF_SALT + "|" + pw)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
+
+const CHAIR = '<svg viewBox="0 0 400 420" role="img" aria-label="Le fauteuil du champion"><defs><radialGradient id="spot" cx="50%" cy="0%" r="90%"><stop offset="0" stop-color="#FFE6A3" stop-opacity=".55"/><stop offset="1" stop-color="#FFE6A3" stop-opacity="0"/></radialGradient><linearGradient id="vel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E23452"/><stop offset="1" stop-color="#8E1530"/></linearGradient></defs><path d="M120 0h160l110 400H10z" fill="url(#spot)"/><ellipse cx="200" cy="392" rx="160" ry="20" fill="#0E0A2B" opacity=".55"/><path d="M92 120c0-60 44-96 108-96s108 36 108 96v120H92z" fill="url(#vel)" stroke="#F2B632" stroke-width="8"/><path d="M128 120c0-36 30-60 72-60s72 24 72 60" fill="none" stroke="#F2B632" stroke-width="4" opacity=".6"/><g fill="#F2B632"><circle cx="140" cy="150" r="5"/><circle cx="200" cy="140" r="5"/><circle cx="260" cy="150" r="5"/><circle cx="170" cy="190" r="5"/><circle cx="230" cy="190" r="5"/></g><rect x="70" y="220" width="260" height="70" rx="26" fill="url(#vel)" stroke="#F2B632" stroke-width="8"/><path d="M60 170c-26 0-34 20-34 44v86h58v-96c0-20-8-34-24-34zM340 170c26 0 34 20 34 44v86h-58v-96c0-20 8-34 24-34z" fill="url(#vel)" stroke="#F2B632" stroke-width="8"/><path d="M84 290h232l-12 34H96z" fill="#5A1020" stroke="#F2B632" stroke-width="6"/><path d="M104 324l-14 60M296 324l14 60" stroke="#F2B632" stroke-width="12" stroke-linecap="round"/></svg>';
+
+/* ---------- État de la partie ---------- */
+let G = null, TIMER = null;
+const V = { screen: "home" };
+function stopTimer() { if (TIMER) { clearInterval(TIMER); TIMER = null; } }
+
+function pickQuestion(themeId) {
+  const t = th(themeId);
+  let free = t.qs.map((_, i) => i).filter((i) => !G.used.has(themeId + ":" + i));
+  if (!free.length) { t.qs.forEach((_, i) => G.used.delete(themeId + ":" + i)); free = t.qs.map((_, i) => i); }
+  const i = free[rnd(free.length)];
+  G.used.add(themeId + ":" + i);
+  const q = t.qs[i];
+  return { theme: themeId, q: q[0], a: q[1], d: q.slice(2) };
+}
+function twoThemes() {
+  const pool = shuffle(G.themes);
+  return pool.length >= 2 ? pool.slice(0, 2) : pool.slice(0, 1);
+}
+function alive() { return G.players.filter((p) => !p.out); }
+
+function newGame(mode, names, champName) {
+  stopTimer();
+  const themes = mode === "solo" ? unlockedIds() : (P.teamThemes || []).filter((id) => th(id));
+  G = { mode, themes, used: new Set(), qPerRound: mode === "solo" ? 2 : (P.teamLen === 1 ? 1 : 2), round: 1, turn: 0, asked: 0, step: "theme", cur: null, log: [] };
+  if (mode === "solo") {
+    const lvl = P.solo.reign;
+    if (lvl > 0) {
+      // le joueur est champion : les challengers virtuels se qualifient entre eux
+      G.champion = { name: P.solo.name, human: true };
+      const bots = shuffle(BOTS).slice(0, 4).map((n) => ({ name: n, bot: true, acc: 0.55 + Math.random() * 0.1, score: 0, out: false }));
+      G.players = bots;
+      G.autoQualif = true;
+    } else {
+      G.champion = { name: "Victor", bot: true, acc: 0.62 };
+      G.players = [{ name: P.solo.name, human: true, score: 0, out: false }].concat(shuffle(BOTS).slice(0, 3).map((n) => ({ name: n, bot: true, acc: 0.48 + Math.random() * 0.14, score: 0, out: false })));
+    }
+  } else {
+    G.champion = champName ? { name: champName } : null;
+    G.players = names.map((n) => ({ name: n, score: 0, out: false }));
+  }
+  V.screen = "play";
+  if (G.autoQualif) simulateQualifs(); else startTurn();
+}
+
+/* ---------- Qualifications ---------- */
+function curPlayer() { return alive()[G.turn]; }
+function startTurn() {
+  stopTimer();
+  const p = curPlayer();
+  G.cur = { themes: twoThemes(), q: null, mode: null, opts: null, pick: null, ok: null, cash: "", revealed: false };
+  G.step = "theme";
+  render();
+  if (p.bot) setTimeout(() => botPlay(), 900);
+}
+function chooseTheme(id) {
+  G.cur.q = pickQuestion(id);
+  G.step = "mode";
+  render();
+}
+function chooseMode(m) {
+  const c = G.cur;
+  c.mode = m;
+  if (m === "carre") c.opts = shuffle([c.q.a].concat(c.q.d));
+  if (m === "duo") c.opts = shuffle([c.q.a, c.q.d[rnd(c.q.d.length)]]);
+  G.step = "answer";
+  render();
+  startClock(G.mode === "solo" ? 30 : 30, () => { if (G.step === "answer" && G.mode === "solo" && curPlayer().human) answer(null); });
+}
+function startClock(sec, onEnd) {
+  stopTimer();
+  const t0 = Date.now();
+  TIMER = setInterval(() => {
+    const left = Math.max(0, sec - (Date.now() - t0) / 1000), bar = $("#tbar");
+    if (bar) bar.style.width = (left / sec * 100) + "%";
+    if (left <= 0) { stopTimer(); beep("tick"); onEnd && onEnd(); }
+  }, 100);
+}
+function answer(opt) {
+  stopTimer();
+  const c = G.cur;
+  c.pick = opt;
+  c.ok = opt === c.q.a;
+  settle();
+}
+function cashVerdict(ok) { stopTimer(); G.cur.ok = ok; settle(); }
+function settle() {
+  const c = G.cur, p = curPlayer();
+  if (c.ok) { p.score += MODES[c.mode].pts; beep("ok"); } else beep("no");
+  if (G.mode === "solo" && p.human && c.ok) { P.solo.cagnotte += MODES[c.mode].pts * 10; saveP(); }
+  G.step = "result";
+  render();
+}
+function botPlay() {
+  if (V.screen !== "play" || G.step !== "theme") return;
+  const p = curPlayer();
+  const id = G.cur.themes[rnd(G.cur.themes.length)];
+  chooseTheme(id);
+  const m = Math.random() < 0.2 ? "cash" : Math.random() < 0.7 ? "carre" : "duo";
+  setTimeout(() => {
+    chooseMode(m);
+    stopTimer();
+    const acc = Math.min(0.95, p.acc + (m === "duo" ? 0.2 : m === "cash" ? -0.12 : 0));
+    setTimeout(() => {
+      const c = G.cur;
+      if (m === "cash") { c.revealed = true; cashVerdict(Math.random() < acc); }
+      else answer(Math.random() < acc ? c.q.a : c.opts.filter((o) => o !== c.q.a)[0]);
+    }, 1400);
+  }, 1100);
+}
+function nextTurn() {
+  G.turn++;
+  if (G.turn >= alive().length) {
+    G.turn = 0; G.asked++;
+    if (G.asked >= G.qPerRound) { endRound(); return; }
+  }
+  startTurn();
+}
+function endRound() {
+  stopTimer();
+  const al = alive(), low = Math.min(...al.map((p) => p.score)), tied = al.filter((p) => p.score === low);
+  G.step = "roundend";
+  if (tied.length === al.length && al.length > 1 && tied.length > 1) {
+    G.tie = { list: tied, idx: 0, res: {} };
+  } else if (tied.length > 1) {
+    G.tie = { list: tied, idx: 0, res: {} };
+  } else { tied[0].out = true; G.elim = [tied[0]]; G.tie = null; }
+  render();
+}
+/* départage : chaque ex-aequo répond à une question Carré */
+function startTie() {
+  const tie = G.tie, p = tie.list[tie.idx];
+  const q = pickQuestion(G.themes[rnd(G.themes.length)]);
+  G.cur = { tieFor: p, q, mode: "carre", opts: shuffle([q.a].concat(q.d)), pick: null, ok: null };
+  G.step = "tie";
+  render();
+  if (p.bot) setTimeout(() => { const ok = Math.random() < p.acc; tieAnswer(ok ? G.cur.q.a : G.cur.opts.find((o) => o !== G.cur.q.a)); }, 1600);
+}
+function tieAnswer(opt) {
+  const c = G.cur; c.pick = opt; c.ok = opt === c.q.a; beep(c.ok ? "ok" : "no");
+  G.tie.res[c.tieFor.name] = c.ok;
+  G.step = "tieres"; render();
+}
+function tieNext() {
+  const tie = G.tie;
+  tie.idx++;
+  if (tie.idx < tie.list.length) { startTie(); return; }
+  const wrong = tie.list.filter((p) => !tie.res[p.name]), right = tie.list.filter((p) => tie.res[p.name]);
+  if (wrong.length && right.length) {
+    const al = alive();
+    // on élimine les perdants du départage, mais il doit rester au moins un joueur
+    const toOut = wrong.length >= al.length ? wrong.slice(0, al.length - 1) : wrong;
+    toOut.forEach((p) => (p.out = true)); G.elim = toOut; G.tie = null; G.step = "roundend"; render();
+  } else { tie.idx = 0; tie.res = {}; startTie(); }
+}
+function afterRound() {
+  G.elim = null;
+  if (G.mode === "solo" && G.players.some((p) => p.human && p.out)) { G.result = { eliminated: true, winner: { name: "" } }; P.solo.games++; P.solo.reign = 0; saveP(); G.step = "end"; render(); return; }
+  if (alive().length <= 1) { startDuel(); return; }
+  G.round++; G.asked = 0; G.turn = 0;
+  alive().forEach((p) => (p.score = 0));
+  startTurn();
+}
+function simulateQualifs() {
+  const ps = G.players.map((p) => ({ p, s: 0 }));
+  for (let k = 0; k < 6; k++) ps.forEach((x) => { if (Math.random() < x.p.acc) x.s += 2; });
+  ps.sort((a, b) => b.s - a.s);
+  ps.slice(1).forEach((x) => (x.p.out = true));
+  G.simWinner = ps[0].p;
+  G.step = "simdone";
+  render();
+}
+
+/* ---------- Duel ---------- */
+function startDuel() {
+  stopTimer();
+  const fin = alive()[0];
+  if (!G.champion) { G.result = { winner: fin, newChamp: true, noChamp: true }; finish(); return; }
+  G.duel = { a: G.champion, b: fin, sa: 0, sb: 0, n: 0, hist: { a: [], b: [] }, sudden: false };
+  G.step = "duelintro";
+  render();
+}
+function duelTurnSide() { return G.duel.n % 2 === 0 ? "b" : "a"; } // le challenger commence
+function duelAsk() {
+  const d = G.duel, side = duelTurnSide(), who = d[side];
+  const q = pickQuestion(G.themes[rnd(G.themes.length)]);
+  G.cur = { q, mode: "carre", opts: shuffle([q.a].concat(q.d)), pick: null, ok: null, side };
+  G.step = "duelq";
+  render();
+  if (who.bot) setTimeout(() => { const acc = who.acc; duelAnswer(Math.random() < acc ? G.cur.q.a : G.cur.opts.find((o) => o !== G.cur.q.a)); }, 1700);
+  else if (G.mode === "solo") startClock(30, () => { if (G.step === "duelq") duelAnswer(null); });
+}
+function duelAnswer(opt) {
+  stopTimer();
+  const d = G.duel, c = G.cur;
+  c.pick = opt; c.ok = opt === c.q.a;
+  if (c.ok) d[c.side === "a" ? "sa" : "sb"]++;
+  d.hist[c.side].push(c.ok);
+  d.n++;
+  beep(c.ok ? "ok" : "no");
+  G.step = "duelres";
+  render();
+}
+function duelNext() {
+  const d = G.duel, qa = d.hist.a.length, qb = d.hist.b.length;
+  if (!d.sudden) {
+    const remA = DUEL_Q - qa, remB = DUEL_Q - qb;
+    if (d.sa > d.sb + remB || d.sb > d.sa + remA) { endDuel(); return; }
+    if (qa >= DUEL_Q && qb >= DUEL_Q) { if (d.sa !== d.sb) { endDuel(); return; } d.sudden = true; }
+  } else if (qa === qb) {
+    if (d.sa !== d.sb) { endDuel(); return; }
+    if (qa - DUEL_Q >= 3) { endDuel(); return; } // 3 échanges de mort subite sans vainqueur : le champion garde sa place
+  }
+  duelAsk();
+}
+function endDuel() {
+  const d = G.duel, champWins = d.sa >= d.sb;
+  G.result = { winner: champWins ? d.a : d.b, champWins, newChamp: !champWins };
+  finish();
+}
+function finish() {
+  stopTimer();
+  const r = G.result;
+  if (G.mode === "team") {
+    if (r.newChamp) { P.team.champ = r.winner.name; P.team.reign = 1; }
+    else P.team.reign++;
+    P.team.hall = [{ name: P.team.champ, reign: P.team.reign, d: new Date().toLocaleDateString("fr-FR") }].concat((P.team.hall || []).filter((h) => h.name !== P.team.champ)).slice(0, 8);
+  } else {
+    P.solo.games++;
+    const youWin = r.winner.human;
+    if (youWin) { P.solo.reign++; P.solo.wins++; P.solo.cagnotte += 100; }
+    else P.solo.reign = 0;
+    P.solo.best = Math.max(P.solo.best, P.solo.reign);
+  }
+  saveP();
+  G.step = "end";
+  beep("win");
+  render();
+}
+
+/* ---------- Affichage ---------- */
+function board() {
+  return '<div class="board">' + G.players.map((p) => '<div class="pl ' + (p.out ? "out " : "") + (G.step !== "simdone" && curPlayer() === p && ["theme", "mode", "answer", "result"].includes(G.step) ? "cur" : "") + '"><b>' + esc(p.name) + '</b><span class="sc">' + p.score + '</span></div>').join("") +
+    (G.champion ? '<div class="pl champ"><b>' + esc(G.champion.name) + '</b><span class="small" style="color:#FFD1DA">dans le fauteuil</span></div>' : "") + "</div>";
+}
+function hud(title, sub) {
+  return '<div class="hud"><p class="phase">' + title + (sub ? "<small>" + sub + "</small>" : "") + '</p><button class="tbtn" data-act="quit">Arrêter la partie</button></div>';
+}
+function whoLine(p, champ) { return '<div class="who"><span class="avatar ' + (champ ? "champ" : "") + '">' + esc(ini(p.name)) + "</span><div><h2>" + esc(p.name) + "</h2>" + (p.bot ? '<p class="small">Joueur virtuel</p>' : "") + "</div></div>"; }
+function themeName(id) { const t = th(id); return esc(t.name); }
+
+function renderHome() {
+  const champ = P.team.champ, solo = P.solo;
+  const n = unlockedIds().length;
+  return '<section class="stagehero"><div><h1><span>Le Fauteuil</span>Éco-Droit</h1>' +
+    '<p class="lead">Un champion est assis dans le fauteuil. Les challengers s\'affrontent sur le vocabulaire d\'économie-droit : le dernier en lice défie le champion en duel. Les thèmes s\'ajoutent au fil des missions terminées dans Urban Shop, Move Club et le module 2.</p>' +
+    '<div class="modes"><button class="mode" data-act="solo"><h3>Jouer en solo</h3><p>Contre trois challengers virtuels, puis en duel contre le champion. ' + (n ? n + " thème" + (n > 1 ? "s" : "") + " débloqué" + (n > 1 ? "s" : "") + " sur cet appareil." : "Aucun thème débloqué pour l'instant.") + '</p></button>' +
+    '<button class="mode" data-act="team"><h3>Jouer en équipes</h3><p>Au vidéoprojecteur, de 2 à 6 équipes. Le professeur choisit les thèmes et valide les réponses Cash.</p></button></div>' +
+    (solo.games ? '<p class="small" style="margin-top:14px">Solo · ' + esc(solo.name) + " : " + solo.wins + " victoire" + (solo.wins > 1 ? "s" : "") + ", meilleur règne " + solo.best + ", cagnotte " + solo.cagnotte + " points.</p>" : "") +
+    '</div><div class="chair" id="chair">' + CHAIR + '<div class="plaque"><b>' + (champ ? esc(champ) : "Fauteuil libre") + "</b><span>" + (champ ? "Champion de la classe · " + P.team.reign + " victoire" + (P.team.reign > 1 ? "s" : "") : "En attente d'un champion") + "</span></div></div></section>" +
+    '<section class="rules"><div class="rule"><h3>Qualifications</h3><p>À son tour, chaque challenger choisit un thème parmi deux, découvre la question puis choisit comment répondre.</p><span class="pts"><span class="chip cash">Cash · 3 pts</span><span class="chip carre">Carré · 2 pts</span><span class="chip duo">Duo · 1 pt</span></span></div>' +
+    '<div class="rule"><h3>Élimination</h3><p>Après une ou deux questions chacun, selon la durée choisie, le plus petit score est éliminé. En cas d\'égalité, une question de départage. On recommence jusqu\'au dernier challenger.</p></div>' +
+    '<div class="rule"><h3>Le duel</h3><p>Le finaliste et le champion répondent chacun à ' + DUEL_Q + ' questions Carré, en alternance. Le meilleur prend ou garde le fauteuil. Égalité : mort subite, et après trois échanges sans vainqueur, le champion garde sa place.</p></div></section>';
+}
+function themeChecks(sel, editable) {
+  const un = unlockedIds();
+  return '<div class="games">' + GAMES.map((g) => {
+    const ts = THEMES.filter((t) => t.game === g);
+    return '<div class="game"><h3>' + g + "<small>" + ts.filter((t) => un.includes(t.id)).length + "/" + ts.length + " débloqués</small></h3>" + ts.map((t) => {
+      const ok = un.includes(t.id), on = sel.includes(t.id);
+      return '<label class="th ' + (ok || editable ? "" : "locked") + '"><input type="checkbox" data-th="' + t.id + '" ' + (on ? "checked" : "") + " " + (editable ? "" : "disabled") + ">" + esc(t.name) + (ok ? "" : '<span class="lk">mission ' + (editable ? "pas encore faite ici" : "à terminer") + "</span>") + "</label>";
+    }).join("") + "</div>";
+  }).join("") + "</div>";
+}
+function renderSoloSetup() {
+  const un = unlockedIds(), champ = P.solo.reign > 0;
+  return '<div class="panel"><h2>Partie en solo</h2><p class="sub">' + (champ ? "Vous êtes dans le fauteuil depuis " + P.solo.reign + " partie" + (P.solo.reign > 1 ? "s" : "") + ". Quatre challengers virtuels s'affrontent : le meilleur viendra vous défier en duel." : "Battez trois challengers virtuels, puis le champion Victor en duel pour prendre sa place.") + "</p>" +
+    '<div class="field"><label for="sname">Votre prénom</label><input id="sname" maxlength="20" autocomplete="given-name" value="' + esc(P.solo.name) + '" ' + (champ ? "readonly" : "") + "></div>" +
+    "<h3 style=\"font-size:20px;margin:14px 0 8px\">Vos thèmes</h3>" +
+    (un.length ? '<p class="small" style="margin-bottom:10px">Chaque mission terminée dans un jeu, sur cet appareil, ajoute son thème.</p>' : '<div class="note">Aucun thème n\'est encore débloqué sur cet appareil. Terminez au moins une mission d\'Urban Shop, de Move Club ou du module 2, puis revenez.</div>') +
+    themeChecks(un, false) +
+    '<div class="err" id="serr" hidden></div><div class="next">' + (champ ? '<button class="btn ghost" data-act="soloreset">Quitter le fauteuil</button>' : "") + '<button class="btn" data-act="solostart" ' + (un.length ? "" : "disabled") + ">" + (champ ? "Défendre mon fauteuil" : "Entrer en jeu") + "</button></div>" +
+    '<details style="margin-top:18px"><summary class="small" style="cursor:pointer">Professeur : débloquer tous les thèmes sur cet appareil</summary><div class="row" style="margin-top:10px"><input id="ppw" type="password" placeholder="Mot de passe" style="border:3px solid var(--ink);border-radius:12px;padding:8px 10px"><button class="btn alt" data-act="unlock">' + (P.unlockAll ? "Revenir à la progression" : "Tout débloquer") + '</button><span class="small" id="pmsg"></span></div></details></div>';
+}
+function renderTeamSetup() {
+  const sel = P.teamThemes || unlockedIds();
+  let names = (V.teams && V.teams.length ? V.teams : ["Équipe 1", "Équipe 2", "Équipe 3"]).filter((n) => n.toLowerCase() !== (P.team.champ || "").toLowerCase());
+  for (let k = 1; names.length < 2; k++) { const n = "Équipe " + k; if (!names.includes(n) && n !== P.team.champ) names.push(n); }
+  return '<div class="panel"><h2>Partie en équipes</h2><p class="sub">Projetez cet écran. Les équipes jouent à tour de rôle ; vous cliquez sur la réponse annoncée et vous validez les réponses Cash.</p>' +
+    '<div class="field"><label for="champ">Champion dans le fauteuil</label><input id="champ" maxlength="28" value="' + esc(P.team.champ) + '" placeholder="Laissez vide pour la première partie"><span class="small">' + (P.team.champ ? "Il garde sa place depuis " + P.team.reign + " partie" + (P.team.reign > 1 ? "s" : "") + "." : "Sans champion, le vainqueur des qualifications s'installe directement dans le fauteuil.") + "</span></div>" +
+    '<div class="field"><label>Équipes challengers (2 à 6)</label><div class="teams" id="teams">' + names.map((n, i) => '<div class="t"><input data-team="' + i + '" maxlength="24" value="' + esc(n) + '" aria-label="Équipe ' + (i + 1) + '">' + (names.length > 2 ? '<button class="btn ghost" style="color:var(--ink);border-color:#CFC4A6;padding:8px 12px;font-size:16px" data-act="delteam" data-i="' + i + '">Retirer</button>' : "") + "</div>").join("") + "</div>" + (names.length < 6 ? '<button class="btn alt" style="margin-top:8px;font-size:16px;padding:8px 14px" data-act="addteam">Ajouter une équipe</button>' : "") + "</div>" +
+    '<div class="field"><label>Durée de la partie</label><div class="row" style="color:var(--ink)"><label class="th"><input type="radio" name="len" value="1" ' + (P.teamLen === 1 ? "checked" : "") + '>Partie courte : 1 question par manche</label><label class="th"><input type="radio" name="len" value="2" ' + (P.teamLen !== 1 ? "checked" : "") + '>Partie normale : 2 questions par manche</label></div><span class="small" id="dur">' + durText(names.length, P.teamLen === 1 ? 1 : 2) + '</span></div>' +
+    '<h3 style="font-size:20px;margin:14px 0 8px">Thèmes de la partie</h3><p class="small" style="margin-bottom:10px">Cochez les notions déjà vues en classe. Les thèmes des missions terminées sur cet ordinateur sont cochés d\'office.</p>' + themeChecks(sel, true) +
+    '<div class="err" id="terr" hidden></div><div class="next"><button class="btn" data-act="teamstart">Lancer la partie</button></div>' +
+    (P.team.hall && P.team.hall.length ? '<h3 style="font-size:20px;margin:18px 0 6px">Les champions de la classe</h3><div class="hall" style="color:var(--ink)">' + P.team.hall.map((h) => "<div><span>" + esc(h.name) + "</span><span>" + h.reign + " victoire" + (h.reign > 1 ? "s" : "") + " · " + h.d + "</span></div>").join("") + '</div><button class="btn ghost" style="color:var(--ink);border-color:#CFC4A6;margin-top:10px;font-size:15px;padding:8px 12px" data-act="resetteam">Libérer le fauteuil</button>' : "") + "</div>";
+}
+function renderPlay() {
+  const c = G.cur;
+  const roundSub = "Il reste " + alive().length + " challenger" + (alive().length > 1 ? "s" : "") + " · question " + (G.asked + 1) + " sur " + G.qPerRound;
+  switch (G.step) {
+    case "theme": {
+      const p = curPlayer();
+      return hud("Qualifications · manche " + G.round, roundSub) + whoLine(p) + '<p style="margin-bottom:12px">' + (p.bot ? "choisit un thème…" : "Choisissez votre thème.") + '</p><div class="themes2">' + c.themes.map((id) => '<button class="tcard" data-act="theme" data-id="' + id + '" ' + (p.bot ? "disabled" : "") + "><small>" + esc(th(id).game) + "</small><b>" + themeName(id) + "</b></button>").join("") + "</div>" + board();
+    }
+    case "mode": {
+      const p = curPlayer();
+      return hud("Qualifications · manche " + G.round, roundSub) + whoLine(p) + '<div class="qcard"><p class="tn">' + themeName(c.q.theme) + "</p><h2>" + esc(c.q.q) + '</h2></div><p style="margin-top:16px">' + (p.bot ? "réfléchit…" : "Comment voulez-vous répondre ?") + '</p><div class="mchoice">' + Object.keys(MODES).map((m) => '<button class="mbtn ' + m + '" data-act="mode" data-m="' + m + '" ' + (p.bot ? "disabled" : "") + "><b>" + MODES[m].label + "</b><span>" + MODES[m].pts + " pt" + (MODES[m].pts > 1 ? "s" : "") + " · " + MODES[m].sub + "</span></button>").join("") + "</div>" + board();
+    }
+    case "answer":
+    case "result": {
+      const p = curPlayer(), res = G.step === "result";
+      let body = "";
+      if (c.mode === "cash") {
+        if (G.mode === "solo" && p.human) {
+          body = c.revealed ? '<div class="reveal">Réponse attendue : <b>' + esc(c.q.a) + "</b><br>Votre réponse : " + (esc(c.cash) || "<i>aucune</i>") + "</div>" + (res ? "" : '<div class="next"><button class="btn red" data-act="cashno">J\'avais faux</button><button class="btn" data-act="cashok">J\'avais juste</button></div><p class="small" style="margin-top:8px">Soyez honnête : vous jugez vous-même votre réponse.</p>')
+            : '<div class="cashbox"><input id="cashin" autocomplete="off" placeholder="Tapez votre réponse" aria-label="Votre réponse"><button class="btn" data-act="cashsend">Valider</button></div>';
+        } else {
+          body = c.revealed || res ? '<div class="reveal">Réponse attendue : <b>' + esc(c.q.a) + "</b></div>" + (res ? "" : '<div class="next"><button class="btn red" data-act="cashno">Faux</button><button class="btn" data-act="cashok">Juste</button></div>')
+            : '<p class="botline">' + (p.bot ? "répond en cash…" : "L'équipe donne sa réponse à voix haute.") + '</p><div class="next"><button class="btn alt" data-act="reveal" ' + (p.bot ? "disabled" : "") + ">Révéler la réponse</button></div>";
+        }
+      } else {
+        body = '<div class="answers">' + c.opts.map((o, i) => { let cl = ""; if (res) { if (o === c.q.a) cl = "ok"; else if (o === c.pick) cl = "no"; } return '<button class="ans ' + cl + '" data-act="ans" data-i="' + i + '" ' + (res || p.bot ? "disabled" : "") + "><i>" + "ABCD"[i] + "</i>" + esc(o) + "</button>"; }).join("") + "</div>";
+      }
+      const verdict = res ? '<p class="verdict ' + (c.ok ? "ok" : "no") + '">' + (c.ok ? "Bonne réponse ! +" + MODES[c.mode].pts + " pt" + (MODES[c.mode].pts > 1 ? "s" : "") : c.pick === null && c.mode !== "cash" ? "Temps écoulé." : "Raté.") + "</p>" + (!c.ok && c.mode !== "cash" ? '<p class="botline">La bonne réponse : <b>' + esc(c.q.a) + "</b></p>" : "") + '<div class="next"><button class="btn" data-act="nextturn">Continuer</button></div>' : (G.mode === "solo" && p.human ? '<div class="timer"><i id="tbar"></i></div>' : "");
+      return hud("Qualifications · manche " + G.round, roundSub) + whoLine(p) + '<div class="qcard"><p class="tn">' + themeName(c.q.theme) + " · <b>" + MODES[c.mode].label + "</b> pour " + MODES[c.mode].pts + " pt" + (MODES[c.mode].pts > 1 ? "s" : "") + "</p><h2>" + esc(c.q.q) + "</h2></div>" + body + verdict + board();
+    }
+    case "roundend": {
+      if (G.tie) return hud("Fin de la manche " + G.round, "Égalité au plus petit score") + '<div class="qcard"><h2>Question de départage</h2><p style="margin-top:8px">' + G.tie.list.map((p) => esc(p.name)).join(", ") + " sont à égalité. Chacun répond à une question Carré : ceux qui se trompent sont éliminés.</p></div><div class=\"next\"><button class=\"btn\" data-act=\"tiestart\">Lancer le départage</button></div>" + board();
+      return hud("Fin de la manche " + G.round) + '<div class="qcard"><h2>' + G.elim.map((p) => esc(p.name)).join(" et ") + " quitte" + (G.elim.length > 1 ? "nt" : "") + " le plateau.</h2><p style=\"margin-top:8px\">" + (alive().length === 1 ? esc(alive()[0].name) + " remporte les qualifications" + (G.champion ? " et va défier " + esc(G.champion.name) + " en duel." : ".") : "Les scores repartent à zéro pour la manche suivante.") + '</p></div><div class="next"><button class="btn" data-act="afterround">' + (alive().length === 1 ? (G.champion ? "Place au duel" : "Voir le résultat") : "Manche suivante") + "</button></div>" + board();
+    }
+    case "tie":
+    case "tieres": {
+      const p = c.tieFor, res = G.step === "tieres";
+      return hud("Départage", esc(G.tie.list.map((x) => x.name).join(" · "))) + whoLine(p) + '<div class="qcard"><p class="tn">' + themeName(c.q.theme) + " · Carré</p><h2>" + esc(c.q.q) + '</h2></div><div class="answers">' + c.opts.map((o, i) => { let cl = ""; if (res) { if (o === c.q.a) cl = "ok"; else if (o === c.pick) cl = "no"; } return '<button class="ans ' + cl + '" data-act="tieans" data-i="' + i + '" ' + (res || p.bot ? "disabled" : "") + "><i>" + "ABCD"[i] + "</i>" + esc(o) + "</button>"; }).join("") + "</div>" + (res ? '<p class="verdict ' + (c.ok ? "ok" : "no") + '">' + (c.ok ? "Juste !" : "Raté.") + '</p><div class="next"><button class="btn" data-act="tienext">Continuer</button></div>' : "") + board();
+    }
+    case "simdone":
+      return hud("Qualifications des challengers") + '<div class="qcard"><h2>' + esc(G.simWinner.name) + " a remporté les qualifications.</h2><p style=\"margin-top:8px\">Vous êtes dans le fauteuil depuis " + P.solo.reign + " partie" + (P.solo.reign > 1 ? "s" : "") + ". Défendez votre place : " + DUEL_Q + " questions chacun, en alternance.</p></div><div class=\"next\"><button class=\"btn\" data-act=\"simduel\">Commencer le duel</button></div>";
+    case "duelintro": {
+      const d = G.duel;
+      return hud("Le duel") + '<div class="endscene"><div class="chair">' + CHAIR + '<div class="plaque"><b>' + esc(d.a.name) + '</b><span>dans le fauteuil</span></div></div><div><h1>' + esc(d.b.name) + " défie " + esc(d.a.name) + '</h1><p class="lead">' + DUEL_Q + " questions Carré chacun, en alternance. Le challenger commence. Une bonne réponse vaut 1 point. En cas d'égalité : mort subite.</p><button class=\"btn\" data-act=\"duelgo\">Première question</button></div></div>";
+    }
+    case "duelq":
+    case "duelres": {
+      const d = G.duel, res = G.step === "duelres", who = d[c.side];
+      const side = (k) => '<div class="duelside ' + (c.side === k && !res ? "on" : "") + '"><span class="avatar ' + (k === "a" ? "champ" : "") + '">' + esc(ini(d[k].name)) + "</span><div><b>" + esc(d[k].name) + "</b><div class=\"dots\">" + Array.from({ length: Math.max(DUEL_Q, d.hist[k].length) }, (_, i) => '<span class="' + (d.hist[k][i] === true ? "ok" : d.hist[k][i] === false ? "no" : "") + '"></span>').join("") + '</div></div><span class="sc">' + d[k === "a" ? "sa" : "sb"] + "</span></div>";
+      return hud("Le duel" + (d.sudden ? " · mort subite" : ""), "Question pour " + esc(who.name)) + '<div class="duelbar">' + side("b") + '<span class="vs">VS</span>' + side("a") + '</div><div class="qcard"><p class="tn">' + themeName(c.q.theme) + "</p><h2>" + esc(c.q.q) + '</h2></div><div class="answers">' + c.opts.map((o, i) => { let cl = ""; if (res) { if (o === c.q.a) cl = "ok"; else if (o === c.pick) cl = "no"; } return '<button class="ans ' + cl + '" data-act="duelans" data-i="' + i + '" ' + (res || who.bot ? "disabled" : "") + "><i>" + "ABCD"[i] + "</i>" + esc(o) + "</button>"; }).join("") + "</div>" +
+        (res ? '<p class="verdict ' + (c.ok ? "ok" : "no") + '">' + (c.ok ? esc(who.name) + " marque le point !" : c.pick === null ? "Temps écoulé." : esc(who.name) + " se trompe.") + '</p><div class="next"><button class="btn" data-act="duelnext">Continuer</button></div>' : who.bot ? '<p class="botline">' + esc(who.name) + " réfléchit…</p>" : G.mode === "solo" ? '<div class="timer"><i id="tbar"></i></div>' : "");
+    }
+    case "end": {
+      const r = G.result, w = r.winner;
+      if (r.eliminated) return '<div class="endscene"><div class="chair">' + CHAIR + '<div class="plaque"><b>' + esc(G.champion.name) + '</b><span>Champion</span></div></div><div><h1>Vous êtes éliminé(e)</h1><p class="lead">Le fauteuil attendra ! Relisez les fiches mémo des thèmes où vous avez hésité, puis retentez votre chance.</p><div class="row"><button class="btn" data-act="solo">Rejouer</button><button class="btn ghost" data-act="home">Accueil</button></div></div></div>';
+      let title, text;
+      if (r.noChamp) { title = esc(w.name) + " s'installe dans le fauteuil"; text = "Le fauteuil était libre : le vainqueur des qualifications devient champion. À la prochaine partie, il attendra son challenger."; }
+      else if (r.newChamp) { title = esc(w.name) + " prend la place !"; text = esc(G.duel.a.name) + " quitte le fauteuil. Score du duel : " + G.duel.sb + " à " + G.duel.sa + "."; }
+      else { title = esc(w.name) + " garde le fauteuil"; text = "Score du duel : " + G.duel.sa + " à " + G.duel.sb + "."; }
+      if (G.mode === "solo") text += w.human ? " Vous êtes champion depuis " + P.solo.reign + " partie" + (P.solo.reign > 1 ? "s" : "") + " · cagnotte " + P.solo.cagnotte + " points." : " Votre meilleur règne : " + P.solo.best + ". Retentez votre chance !";
+      else text += " " + esc(P.team.champ) + " compte " + P.team.reign + " victoire" + (P.team.reign > 1 ? "s" : "") + ".";
+      const champName = G.mode === "solo" ? (P.solo.reign > 0 ? P.solo.name : w.name) : P.team.champ;
+      return '<div class="endscene"><div class="chair ' + (r.newChamp ? "wobble" : "") + '">' + CHAIR + '<div class="plaque"><b>' + esc(champName) + '</b><span>Champion</span></div></div><div><h1>' + title + '</h1><p class="lead">' + text + '</p><div class="row"><button class="btn" data-act="' + (G.mode === "solo" ? "solo" : "team") + '">Rejouer</button><button class="btn ghost" data-act="home">Accueil</button></div></div></div>';
+    }
+  }
+  return "";
+}
+function renderThemesInfo() {
+  const un = unlockedIds();
+  return '<div class="panel"><h2>Les thèmes</h2><p class="sub">' + THEMES.length + " thèmes, " + THEMES.reduce((a, t) => a + t.qs.length, 0) + " questions tirées des fiches mémo. Sur cet appareil, " + un.length + " thème" + (un.length > 1 ? "s sont débloqués" : " est débloqué") + ".</p>" + themeChecks(un, false) + '<div class="next"><button class="btn" data-act="home">Retour</button></div></div>';
+}
+const nbsp = (h) => h.replace(/ ([?!:;»])/g, "\u00A0$1").replace(/« /g, "«\u00A0");
+function render() {
+  const app = $("#app");
+  if (V.screen === "home") app.innerHTML = nbsp(renderHome());
+  else if (V.screen === "solo") app.innerHTML = nbsp(renderSoloSetup());
+  else if (V.screen === "team") app.innerHTML = nbsp(renderTeamSetup());
+  else if (V.screen === "themes") app.innerHTML = nbsp(renderThemesInfo());
+  else if (V.screen === "play") app.innerHTML = nbsp(renderPlay());
+  $("#sndbtn").textContent = "Son : " + (P.snd ? "oui" : "non");
+  const f = app.querySelector("#cashin, .tcard:not(:disabled), .mbtn:not(:disabled), .ans:not(:disabled), .next .btn");
+  if (f && V.screen === "play") f.focus({ preventScroll: true });
+}
+function durText(n, q) {
+  let tot = 0;
+  for (let k = n; k >= 2; k--) tot += k * q;
+  tot += 2 * DUEL_Q;
+  const lo = Math.round(tot * 0.8), hi = Math.round(tot * 1.1);
+  return "Environ " + tot + " questions, soit " + lo + " à " + hi + " minutes avec " + n + " équipes challengers.";
+}
+function readTeams() { return [...document.querySelectorAll("[data-team]")].map((i) => i.value); }
+
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-act]");
+  if (!b || b.disabled) return;
+  const a = b.dataset.act;
+  switch (a) {
+    case "home": stopTimer(); V.screen = "home"; G = null; render(); window.scrollTo(0, 0); return;
+    case "themes": stopTimer(); V.screen = "themes"; render(); return;
+    case "sound": P.snd = !P.snd; saveP(); render(); return;
+    case "solo": stopTimer(); V.screen = "solo"; render(); window.scrollTo(0, 0); return;
+    case "team": stopTimer(); V.screen = "team"; V.teams = V.teams || null; render(); window.scrollTo(0, 0); return;
+    case "quit": if (confirm("Arrêter la partie en cours ?")) { stopTimer(); V.screen = "home"; G = null; render(); } return;
+    case "solostart": {
+      const n = ($("#sname").value || "").trim();
+      if (!n) { const er = $("#serr"); er.hidden = false; er.textContent = "Écrivez votre prénom pour entrer en jeu."; $("#sname").focus(); return; }
+      P.solo.name = n; saveP(); newGame("solo"); window.scrollTo(0, 0); return;
+    }
+    case "soloreset": if (confirm("Quitter le fauteuil ? Votre règne repart à zéro.")) { P.solo.reign = 0; saveP(); render(); } return;
+    case "unlock": {
+      const ok = (await hash($("#ppw").value || "")) === PROF_HASH;
+      if (!ok) { $("#pmsg").textContent = "Mot de passe incorrect."; return; }
+      P.unlockAll = !P.unlockAll; saveP(); render(); return;
+    }
+    case "addteam": { const t = readTeams(); t.push("Équipe " + (t.length + 1)); V.teams = t; render(); return; }
+    case "delteam": { const t = readTeams(); t.splice(+b.dataset.i, 1); V.teams = t; render(); return; }
+    case "teamstart": {
+      const names = readTeams().map((s) => s.trim()).filter(Boolean);
+      const sel = [...document.querySelectorAll("[data-th]:checked")].map((i) => i.dataset.th);
+      const champ = $("#champ").value.trim();
+      const er = $("#terr");
+      if (names.length < 2) { er.hidden = false; er.textContent = "Il faut au moins deux équipes challengers."; return; }
+      if (new Set(names.map((n) => n.toLowerCase())).size !== names.length || names.some((n) => n.toLowerCase() === champ.toLowerCase())) { er.hidden = false; er.textContent = "Donnez un nom différent à chaque équipe et au champion."; return; }
+      if (!sel.length) { er.hidden = false; er.textContent = "Cochez au moins un thème."; return; }
+      const lenEl = document.querySelector('input[name="len"]:checked'); P.teamLen = lenEl ? +lenEl.value : 2;
+      P.teamThemes = sel; if (champ !== P.team.champ) { P.team.champ = champ; P.team.reign = champ ? 0 : 0; } saveP(); V.teams = names;
+      newGame("team", names, champ || null); window.scrollTo(0, 0); return;
+    }
+    case "resetteam": if (confirm("Libérer le fauteuil et effacer la liste des champions ?")) { P.team = { champ: "", reign: 0, hall: [] }; saveP(); render(); } return;
+    case "theme": chooseTheme(b.dataset.id); return;
+    case "mode": chooseMode(b.dataset.m); return;
+    case "ans": answer(G.cur.opts[+b.dataset.i]); return;
+    case "cashsend": stopTimer(); G.cur.cash = ($("#cashin").value || "").trim(); G.cur.revealed = true; render(); return;
+    case "reveal": G.cur.revealed = true; render(); return;
+    case "cashok": cashVerdict(true); return;
+    case "cashno": cashVerdict(false); return;
+    case "nextturn": nextTurn(); return;
+    case "tiestart": startTie(); return;
+    case "tieans": tieAnswer(G.cur.opts[+b.dataset.i]); return;
+    case "tienext": tieNext(); return;
+    case "afterround": afterRound(); return;
+    case "simduel": G.duel = { a: { name: P.solo.name, human: true }, b: Object.assign(G.simWinner, { acc: Math.min(0.9, 0.6 + 0.05 * P.solo.reign) }), sa: 0, sb: 0, n: 0, hist: { a: [], b: [] }, sudden: false }; G.step = "duelintro"; render(); return;
+    case "duelgo": duelAsk(); return;
+    case "duelans": duelAnswer(G.cur.opts[+b.dataset.i]); return;
+    case "duelnext": duelNext(); return;
+  }
+});
+document.addEventListener("change", (e) => {
+  if (e.target.name === "len" || e.target.dataset.team != null) { const d = $("#dur"); if (d) d.textContent = durText(readTeams().filter((x) => x.trim()).length, +document.querySelector('input[name="len"]:checked').value); }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && e.target.id === "cashin") { e.preventDefault(); const b = document.querySelector('[data-act="cashsend"]'); if (b) b.click(); }
+  if (V.screen === "play" && G && /^[a-dA-D]$/.test(e.key) && e.target.tagName !== "INPUT") {
+    const btn = document.querySelectorAll(".ans:not(:disabled)")["abcd".indexOf(e.key.toLowerCase())];
+    if (btn) btn.click();
+  }
+});
+render();
+</script>
+</body>
+</html>
